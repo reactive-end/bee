@@ -4,9 +4,11 @@
  * Autenticacion minimalista con animaciones GSAP
  */
 
-session_start();
+require_once '../../includes/config/constants.php';
+require_once ROOT_PATH . '/includes/classes/Session.php';
+require_once ROOT_PATH . '/includes/functions/auth.functions.php';
 
-require_once '../../includes/functions/auth.functions.php';
+$session = Session::getInstance();
 
 $error = '';
 
@@ -19,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $result = login($username, $password);
         if ($result['success']) {
-            header('Location: ../dashboard/index.php');
+            header('Location: ' . BASE_URL . '/modules/dashboard/index.php');
             exit;
         } else {
             $error = $result['message'];
@@ -27,8 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-if (isLoggedIn()) {
-    header('Location: ../dashboard/index.php');
+if ($session->isLoggedIn()) {
+    header('Location: ' . BASE_URL . '/modules/dashboard/index.php');
     exit;
 }
 ?>
@@ -40,7 +42,7 @@ if (isLoggedIn()) {
     <title>Bee - Iniciar Sesion</title>
     <link rel="stylesheet" href="../../assets/css/variables.css">
     <link rel="stylesheet" href="../../assets/css/login.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="../../assets/js/gsap.min.js"></script>
 </head>
 <body>
     <div class="login-container">

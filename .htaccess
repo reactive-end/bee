@@ -1,0 +1,27 @@
+# Proyecto Bee - Configuracion Apache
+# Reescritura de URLs y seguridad basica
+
+Options -Indexes
+
+RewriteEngine On
+RewriteBase /bee/
+
+# Bloquear acceso directo a archivos sensibles
+<FilesMatch "\.(env|log|sql|md)$">
+    Require all denied
+</FilesMatch>
+
+# Redirigir todas las peticiones al index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# Configuracion de cache para assets
+<FilesMatch "\.(css|js|jpg|jpeg|png|gif|svg|ico)$">
+    Header set Cache-Control "max-age=2592000, public"
+</FilesMatch>
+
+# Proteger includes y database
+RewriteRule ^includes/ - [F,L]
+RewriteRule ^database/ - [F,L]
+RewriteRule ^templates/ - [F,L]

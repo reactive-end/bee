@@ -1,17 +1,21 @@
 <?php
 /**
  * Punto de entrada principal - Proyecto Bee
- * Redirige al login si no hay sesion activa
+ * Redirige segun estado de sesion
  */
 
-session_start();
+// Cargar configuracion
+require_once __DIR__ . '/includes/config/constants.php';
+require_once __DIR__ . '/includes/classes/Database.php';
+require_once __DIR__ . '/includes/classes/Session.php';
+require_once __DIR__ . '/includes/functions/auth.functions.php';
 
-require_once 'includes/functions/auth.functions.php';
+$session = Session::getInstance();
 
-if (isLoggedIn()) {
-    header('Location: modules/dashboard/index.php');
+if ($session->isLoggedIn()) {
+    header('Location: ' . BASE_URL . '/modules/dashboard/index.php');
     exit;
 }
 
-header('Location: modules/auth/login.php');
+header('Location: ' . BASE_URL . '/modules/auth/login.php');
 exit;
